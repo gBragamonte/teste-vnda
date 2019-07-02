@@ -6,7 +6,7 @@ import * as userReducer from "./user";
 
 export interface RootState {
 	todoList: Todo[];
-	usersList: any;
+	usersList: User[];
 }
 
 export default (history: History) =>

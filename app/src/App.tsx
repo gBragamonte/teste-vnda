@@ -56,7 +56,7 @@ function Drawer(props: { history: any }) {
 					<ListItemIcon>
 						<PeopleIcon />
 					</ListItemIcon>
-					<ListItemText primary="Usuarios" />
+					<ListItemText primary="Usuários" />
 				</ListItem>
 			</List>
 		</div>

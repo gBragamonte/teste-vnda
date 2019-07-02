@@ -1,25 +1,20 @@
+import { TextField, MenuItem, CircularProgress, Button } from "@material-ui/core";
+import ChipInput from "material-ui-chip-input";
+import axios, { AxiosRequestConfig } from "axios";
 import * as React from "react";
-import { Theme } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/styles";
-import {
-	Button,
-	Grid,
-	Typography,
-	Breadcrumbs,
-	Link,
-	TextField,
-	MenuItem
-} from "@material-ui/core";
-import { history } from "../configureStore";
-import axios, { AxiosRequestConfig } from 'axios';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { RouteComponentProps } from 'react-router-dom';
-import { RootState } from "../reducers";
-import { useSelector } from "react-redux";
 import { useActions } from "../actions";
 import * as UserActions from "../actions/user";
-import ChipInput from 'material-ui-chip-input';
-import { fetchUsersFromAPI } from '../resources/user';
+import { history } from "../configureStore";
+import { makeStyles } from "@material-ui/styles";
+import { Theme } from "@material-ui/core/styles";
+
+const keyLabels: {[k: string]: any} = {
+  name: 'Nome',
+  email: 'Email',
+  external_code: 'Código Externo',
+  role: 'Função',
+  tags: 'Tags'
+};
 
 interface State {
 	id: any;
@@ -43,38 +38,20 @@ const initialState = {
 	tags: [],
 }
 
-function UserPage({ match }: RouteComponentProps<any>) {
-	
-	const classes = useStyles();
 
-	const [values, setValues] = React.useState<State>(initialState);
+function FormUser (props: React.ComponentProps<any>) {
 
-	const usersList = useSelector((state: RootState) => state.usersList);
+  const [values, setValues] = React.useState<State>(initialState);
+  const userActions = useActions(UserActions);
+  const classes = useStyles();
 
-	const userActions = useActions(UserActions);
-
-	const clearForm = () => setValues(initialState);
-
-	const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [name]: event.target.value });
 	};
 
-	const handleSetValues = (key: keyof State, val: any) => setValues({ ...values, [key]: val });
+  const handleSetValues = (key: keyof State, val: any) => setValues({ ...values, [key]: val });
 
-	const keyLabels: {[k: string]: any} = {
-		name: 'Nome',
-		email: 'Email',
-		external_code: 'Código Externo',
-		role: 'Função',
-		tags: 'Tags'
-	};
-
-	const getLabel = (key: string) => {
-		if (!!keyLabels[key]) return keyLabels[key];
-		else return key;
-	}
-	
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		
 		handleSetValues('loading', true);
@@ -104,55 +81,28 @@ function UserPage({ match }: RouteComponentProps<any>) {
 			let response = all.data;
 			if (!!response.errors) {
 				console.log(response);
-				for (const key in response.errors) { alert(getLabel(key) + ` ${response.errors[key]}`); }
+				for (const key in response.errors) {
+          alert(`${keyLabels[key]} ${response.errors[key]}`);
+        }
 				return;
 			} else cb(response);
 		})
 		.catch(e => console.error(e))
 		.finally(() => handleSetValues('loading', false))
-	}
-
-	const setFormValues = () => {
-		let uid = match.params.id || false;
-		if (uid) {
-			let user = usersList.find(u => u.id === parseInt(uid));
-			// console.log(user)
-			if (!user) {
-				alert('Usuário não encontrado!');
-				return history.push('/users');
-			} else setValues({...values, ...user, title: user.email});
-		}
-	}
-
-	React.useEffect(() => {
-
-		if (!usersList.length)
-			fetchUsersFromAPI()
-			.then(response => {
-				userActions.fillUsers(response.data);
-				// handleSetValues('loading', false);
-			});
-		else setFormValues();
-		
-	}, [usersList]);
-
-	const handleChipInputUpdate = (sEvent: any) => {
+  }
+  
+  const handleChipInputUpdate = (sEvent: any) => {
 		let value = sEvent.currentTarget.value;
 		if (value.search(',') <= -1) return;
 		handleSetValues('tags', [...values.tags, value.replace(/,/g, '')]);
-	}
-
+  }
+  
+  React.useEffect(() => {
+    console.log(props)
+  }, [])
+  
   return (
-		<Grid container className={classes.root}>
-			<Grid item xs={6}>
-      <Breadcrumbs aria-label="Breadcrumb">
-          <Link color="inherit" href="#" onClick={() => history.push('/users')} >Usuarios</Link>
-          <Typography variant="h5" color="textPrimary">{values.title}</Typography>
-        </Breadcrumbs>
-			</Grid>
-			<Grid item xs={12}>
-				{/* <Paper> */}
-					<form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
 					
 						<div>
 							<TextField
@@ -224,14 +174,7 @@ function UserPage({ match }: RouteComponentProps<any>) {
 						</div>
 
 					</form>
-					{/* <FormControl>
-						<InputLabel htmlFor="my-input">Email</InputLabel>
-						<Input id="my-input" aria-describedby="my-helper-text" />
-					</FormControl> */}
-				{/* </Paper> */}
-			</Grid>
-		</Grid>
-	);
+  )
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -263,4 +206,4 @@ const useStyles = makeStyles((theme: Theme) => ({
 	}
 }));
 
-export default UserPage;
+export default FormUser;

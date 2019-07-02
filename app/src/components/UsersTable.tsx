@@ -13,6 +13,7 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import axios from 'axios';
 import { history } from "../configureStore";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { fetchUsersFromAPI } from '../resources/user';
 
 interface Props {}
 
@@ -30,19 +31,16 @@ function UsersTable(props: Props) {
 	
 	// like componentDidMounted
 	React.useEffect(() => {
-		// 
-		const urlBase = 'http://localhost:3001';
-		const fillUsersOnState = () => {
+		
+		if (!usersList.length) {
 			setLoading(true);
-			axios.get(`${urlBase}/users`)
+			fetchUsersFromAPI()
 			.then(response => {
-				if (response.data) userActions.fillUsers(response.data);
-			})
-			.catch(e => {
-				console.error(e);
-			}).finally(() => setLoading(false))
+				userActions.fillUsers(response.data);
+				setLoading(false);
+			});
 		}
-		if (!usersList.length) fillUsersOnState();
+
 	}, [usersList, userActions]);
 	
 	// window.console.log('users table mounted');
@@ -50,10 +48,12 @@ function UsersTable(props: Props) {
 	const handleCloseDialog = () => { setOpenDialog(false); };
   
   const handleConfirmDialog = () => {
+		setLoading(true);
+		handleCloseDialog();
 		axios.delete(`http://localhost:3001/users/${deleteUserId}`)
 		.then(response => {
 			userActions.deleteUser(deleteUserId);
-			handleCloseDialog();
+			setLoading(false);
 		})
   }
   
@@ -73,7 +73,7 @@ function UsersTable(props: Props) {
 						<TableCell padding="default">Nome</TableCell>
 						<TableCell padding="default">Email</TableCell>
 						<TableCell padding="default">Código Externo</TableCell>
-						<TableCell padding="default">Acoes</TableCell>
+						<TableCell padding="default">Ações</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -85,6 +85,7 @@ function UsersTable(props: Props) {
 								<TableCell>{u.external_code}</TableCell>
 								<TableCell>
 									<IconButton
+										title="Editar"
 										aria-label="Editar"
 										color="primary"
 										onClick={() => history.push(`/users/${u.id}/edit`)}
@@ -92,6 +93,7 @@ function UsersTable(props: Props) {
 										<EditIcon />
 									</IconButton>
 									<IconButton
+										title="Excluir"
 										aria-label="Excluir"
 										color="secondary"
 										onClick={() => confirmDelete(u.id)}
