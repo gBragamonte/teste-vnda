@@ -10,18 +10,12 @@ COPY package*.json ./
 
 RUN npm install
 
+# Bundle app source
+COPY . .
+
 # Build latest changes
 RUN npm run build-ts
 
-# If you are building your code for production
-RUN npm ci --only=production
-
-# Copy env variables (only without using docker)
-# COPY .env .
-
-# Bundle app source
-COPY ./dist/ .
-
 EXPOSE 3001
 
-CMD node server.js
+CMD npm run serve
