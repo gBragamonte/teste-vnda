@@ -8,21 +8,21 @@
 - Docker Compose v1.24.0, build 0aa59064
 - API rodando na porta 3001 (fixo)
 
-### Requisitos
+## Requisitos
 
-#### Opcao 1 . Docker Compose
+### Opcao 1 . Docker Compose
 
 - Docker instalado localmente;
 - Docker Compose instalado localmente;
 
-#### Opcao 2. Tradicional
+### Opcao 2. Tradicional
 
 - NodeJs >= v10.16.0
 - NPM >= NPM v6.10.0
 
 ## Como executar?
 
-### Docker Compose
+### Opcao 1 . Docker Compose
 
 Clone o arquivo da raiz, _.env.example_ com novo nome de _.env_ e preencha o campo com sua chave de autenticacao.
 
@@ -33,7 +33,7 @@ docker-compose up -d
 
 e confira a aplicacao em _http://localhost_
 
-### Tradicional
+### Opcao 2 . Tradicional
 
 Va ate a pasta *api*, clone o arquivo, _.env.example_ com novo nome de _.env_ e preencha o campo com sua chave de autenticacao.
 
