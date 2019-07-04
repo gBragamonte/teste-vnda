@@ -53,8 +53,6 @@ function UserPage({ match }: RouteComponentProps<any>) {
 
 	const userActions = useActions(UserActions);
 
-	const clearForm = () => setValues(initialState);
-
 	const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [name]: event.target.value });
 	};
@@ -130,10 +128,10 @@ function UserPage({ match }: RouteComponentProps<any>) {
 			fetchUsersFromAPI()
 			.then(response => {
 				userActions.fillUsers(response.data);
-				// handleSetValues('loading', false);
 			});
+		// eslint-disable-next-line
 		else setFormValues();
-		
+	// eslint-disable-next-line
 	}, [usersList]);
 
 	const handleChipInputUpdate = (sEvent: any) => {

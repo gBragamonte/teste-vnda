@@ -1,10 +1,4 @@
 
-export interface Todo {
-    id: number;
-    text: string;
-    completed: boolean;
-}
-
 export interface User {
     id: number;
     name: string;
@@ -15,10 +9,6 @@ export interface User {
 }
 
 export enum ActionType {
-    ADD_TODO,
-    DELETE_TODO,
-    COMPLETE_TODO,
-    UNCOMPLETE_TODO,
     FILL_USERS,
     ADD_USER,
     UPDATE_USER,

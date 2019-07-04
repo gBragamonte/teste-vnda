@@ -1,20 +1,16 @@
-import { Button, Grid, Typography, Breadcrumbs, Paper, Container } from "@material-ui/core";
+import { Button, Grid, Typography, Container } from "@material-ui/core";
 import { Theme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/styles";
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import UsersTable from "../components/UsersTable";
-
 import { history } from "../configureStore";
-import clsx from 'clsx';
 
 interface Props extends RouteComponentProps<void> {}
 
 function UsersListPage(props: Props) {
 	
 	const classes = useStyles();
-
-	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
 	return (
 		<main className={classes.content}>

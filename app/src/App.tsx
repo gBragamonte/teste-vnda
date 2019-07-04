@@ -10,7 +10,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Route, RouteComponentProps, Router } from "react-router-dom";
 import { history } from "./configureStore";
-import { Todo } from "./model/model";
 import HomePage from "./pages/HomePage";
 import UsersListPage from "./pages/UsersListPage";
 import UserPage from "./pages/UserPage";
@@ -63,9 +62,7 @@ function Drawer(props: { history: any }) {
 	);
 }
 
-interface Props extends RouteComponentProps<void>, WithWidth {
-	todoList: Todo[];
-}
+interface Props extends RouteComponentProps<void>, WithWidth {}
 
 function App(props?: Props) {
 	const classes = useStyles();
@@ -176,9 +173,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 function mapStateToProps(state: RootState) {
-	return {
-		todoList: state.todoList,
-	};
+	return {};
 }
 
 export default connect(mapStateToProps)(withRoot(withWidth()(App)));
